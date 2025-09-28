@@ -71,7 +71,10 @@ export default class Main extends Component {
 
   handleAddPokemon = async () => {
     const { myPokemons, searchPokemon } = this.state;
-    if (!searchPokemon) return;
+    if (!searchPokemon.trim()) {
+      alert('Por favor, digite o nome ou número do Pokémon');
+      return;
+    }
     this.setState({ loading: true });
     Keyboard.dismiss();
 
