@@ -9,36 +9,14 @@ import {
   Input,
   SubmitButton,
   List,
-  User as PokemonCard,
-  Avatar,
+  PokemonCard,
+  ImageStyle,
   Name,
-  Bio,
-  ProfileButton,
-  ProfileButtonText,
+  Button,
+  ButtonText,
+  Label,
+  colors,
 } from "../styles";
-
-const colors = {
-  types: {
-    normal: "#A8A878",
-    fire: "#F08030",
-    water: "#6890F0",
-    electric: "#F8D030",
-    grass: "#78C850",
-    ice: "#98D8D8",
-    fighting: "#C03028",
-    poison: "#A040A0",
-    ground: "#E0C068",
-    flying: "#A890F0",
-    psychic: "#F85888",
-    bug: "#A8B820",
-    rock: "#B8A038",
-    ghost: "#705898",
-    dragon: "#7038F8",
-    dark: "#705848",
-    steel: "#B8B8D0",
-    fairy: "#EE99AC",
-  },
-};
 
 export default class Main extends Component {
   state = {
@@ -48,25 +26,15 @@ export default class Main extends Component {
   };
 
   async componentDidMount() {
-    const myPokemons = await AsyncStorage.getItem("myPokemons");
-    if (myPokemons) {
-      let pokemons = JSON.parse(myPokemons);
-      pokemons = await Promise.all(
-        pokemons.map(async (pokemon) => {
-          if (typeof pokemon.types === "string" || !pokemon.types[0].cor) {
-            const details = await fetchPokemonDetails(pokemon.name);
-            return {
-              ...pokemon,
-              types: details.types.map((type) => ({
-                nome: this.traduzirTipo(type.type.name),
-                cor: colors.types[type.type.name],
-              })),
-            };
-          }
-          return pokemon;
-        })
-      );
-      this.setState({ myPokemons: pokemons });
+    try {
+      const savedPokemons = await AsyncStorage.getItem("myPokemons");
+      if (savedPokemons) {
+        this.setState({ myPokemons: JSON.parse(savedPokemons) });
+      }
+    } catch (error) {
+      console.error("Falha ao carregar Pokémons salvos", error);
+    } finally {
+      this.setState({ loadingInitial: false });
     }
   }
 
@@ -102,38 +70,41 @@ export default class Main extends Component {
   };
 
   handleAddPokemon = async () => {
+    const { myPokemons, searchPokemon } = this.state;
+    if (!searchPokemon) return;
+    this.setState({ loading: true });
+    Keyboard.dismiss();
+
     try {
-      const { myPokemons, searchPokemon } = this.state;
-      this.setState({ loading: true });
-
-      const pokemonDetails = await fetchPokemonDetails(
-        searchPokemon.toLowerCase()
-      );
-
-      if (myPokemons.find((p) => p.id === pokemonDetails.id)) {
-        alert("Pokémon já adicionado!");
-        this.setState({ loading: false });
+      const pokemon = await fetchPokemonDetails(searchPokemon.toLowerCase());
+      if (myPokemons.find((p) => p.id === pokemon.id)) {
+        alert("Este Pokémon já está na sua Pokédex!");
         return;
       }
-
-      const pokemon = {
-        id: pokemonDetails.id,
-        name: pokemonDetails.name,
-        types: pokemonDetails.types.map((type) => ({
-          nome: this.traduzirTipo(type.type.name),
-          cor: colors.types[type.type.name],
+      const newPokemon = {
+        id: pokemon.id,
+        name: pokemon.name,
+        sprites: pokemon.sprites,
+        image: pokemon.sprites.other["official-artwork"].front_default,
+        types: pokemon.types.map((typeInfo) => ({
+          nome: this.traduzirTipo(typeInfo.type.name),
+          cor: colors.types[typeInfo.type.name],
         })),
-        sprite: pokemonDetails.sprites.front_default,
+        altura: pokemon.height / 10,
+        peso: pokemon.weight / 10,
+        stats: pokemon.stats.map((s) => ({
+          nome: s.stat.name,
+          valor: s.base_stat,
+        })),
       };
 
       this.setState({
-        myPokemons: [...myPokemons, pokemon],
+        myPokemons: [...myPokemons, newPokemon],
         searchPokemon: "",
-        loading: false,
       });
-      Keyboard.dismiss();
     } catch (error) {
       alert("Pokémon não encontrado!");
+    } finally {
       this.setState({ loading: false });
     }
   };
@@ -168,7 +139,10 @@ export default class Main extends Component {
             const mainType = item.types[0];
             return (
               <PokemonCard style={{ backgroundColor: mainType.cor + "20" }}>
-                <Avatar source={{ uri: item.sprite }} />
+                <ImageStyle
+                  source={{ uri: item.image }}
+                  style={{ borderWidth: 2, borderColor: "black" }}
+                />
                 <Name>{item.name}</Name>
                 <View
                   style={{
@@ -189,13 +163,13 @@ export default class Main extends Component {
                         marginHorizontal: 5,
                       }}
                     >
-                      <Bio style={{ color: "white", fontWeight: "bold" }}>
+                      <Label style={{ color: "white", fontWeight: "bold" }}>
                         {tipo.nome}
-                      </Bio>
+                      </Label>
                     </View>
                   ))}
                 </View>
-                <ProfileButton
+                <Button
                   onPress={() => {
                     this.props.navigation.navigate("pokemon", {
                       pokemon: item,
@@ -203,9 +177,9 @@ export default class Main extends Component {
                   }}
                   style={{ backgroundColor: mainType.cor }}
                 >
-                  <ProfileButtonText>Ver detalhes</ProfileButtonText>
-                </ProfileButton>
-                <ProfileButton
+                  <ButtonText>Ver detalhes</ButtonText>
+                </Button>
+                <Button
                   onPress={() => {
                     this.setState({
                       myPokemons: myPokemons.filter((p) => p.id !== item.id),
@@ -213,8 +187,8 @@ export default class Main extends Component {
                   }}
                   style={{ backgroundColor: "#EE1515", marginTop: 5 }}
                 >
-                  <ProfileButtonText>Remover</ProfileButtonText>
-                </ProfileButton>
+                  <ButtonText>Remover</ButtonText>
+                </Button>
               </PokemonCard>
             );
           }}

@@ -20,7 +20,7 @@ export default function Routes() {
             title: "LOGIN",
             headerTitleAlign: "center",
             headerStyle: {
-              backgroundColor: "#3498DB",
+              backgroundColor: "#EE1515",
             },
             headerTitleStyle: {
               fontWeight: "bold",
@@ -65,7 +65,7 @@ export default function Routes() {
             title: "Cadastro de Usuários",
             headerTitleAlign: "center",
             headerStyle: {
-              backgroundColor: "#3498DB",
+              backgroundColor: "#EE1515",
             },
             headerTitleStyle: {
               fontWeight: "bold",

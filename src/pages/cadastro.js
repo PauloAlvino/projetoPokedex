@@ -20,6 +20,12 @@ export default class Cadastro extends Component {
       alert("Preencha todos os campos!");
       return;
     }
+    const userExists = await AsyncStorage.getItem("user");
+    const userJson = JSON.parse(userExists);
+    if (userExists && userJson.email === email) {
+      alert("Usuário já cadastrado");
+      return;
+    }
     const user = {
       email,
       password,
@@ -69,7 +75,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   button: {
-    backgroundColor: "#3498db",
+    backgroundColor: "#EE1515",
     borderRadius: 5,
     padding: 10,
     width: "80%",

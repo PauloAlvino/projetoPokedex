@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 import { RectButton } from "react-native-gesture-handler";
 
-const colors = {
-  primary: "#EE1515", 
-  secondary: "#222224", 
-  accent: "#FFCB05", 
+export const colors = {
+  primary: "#EE1515",
+  secondary: "#222224",
+  accent: "#FFCB05",
   background: "#F5F5F5",
   text: "#222224",
   textLight: "#666666",
@@ -76,36 +76,33 @@ export const List = styled.FlatList.attrs({
   contentContainerStyle: { paddingTop: 20 },
 })``;
 
-export const User = styled.View`
+export const PokemonCard = styled.View`
   background: white;
   margin: 0 10px 20px;
   border-radius: 15px;
   padding: 15px;
   align-items: center;
-  elevation: 3;
-  shadow-color: #000;
-  shadow-offset: 0px 2px;
-  shadow-opacity: 0.25;
-  shadow-radius: 3.84px;
 `;
 
-export const Avatar = styled.Image`
+export const ImageStyle = styled.Image`
   width: 120px;
   height: 120px;
   background: ${colors.background};
+  border-radius: 60px;
 `;
 
 export const Name = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   color: ${colors.text};
   font-weight: bold;
   margin-top: 8px;
   text-transform: capitalize;
   text-align: center;
+  letter-spacing: 1px;
 `;
 
-export const Bio = styled.Text.attrs({
-  numberOfLines: 2,
+export const Label = styled.Text.attrs({
+  numberOfLines: 1,
 })`
   font-size: 14px;
   line-height: 20px;
@@ -114,21 +111,27 @@ export const Bio = styled.Text.attrs({
   text-align: center;
 `;
 
-export const ProfileButton = styled(RectButton)`
+export const Button = styled(RectButton)`
   margin-top: 10px;
   align-self: stretch;
-  border-radius: 8px;
+  border-radius: 20px;
   background: ${(props) => props.style?.backgroundColor || colors.primary};
   justify-content: center;
   align-items: center;
   height: 40px;
+  elevation: 3;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 3.84px;
 `;
 
-export const ProfileButtonText = styled.Text`
+export const ButtonText = styled.Text`
   font-size: 14px;
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;
+  letter-spacing: 1px;
 `;
 
 export const Header = styled.View`
@@ -138,22 +141,12 @@ export const Header = styled.View`
   background: white;
   border-radius: 15px;
   margin-bottom: 20px;
-  elevation: 3;
-  shadow-color: #000;
-  shadow-offset: 0px 2px;
-  shadow-opacity: 0.25;
-  shadow-radius: 3.84px;
 `;
 
 export const Stats = styled.View`
   background: white;
   border-radius: 15px;
   padding: 20px;
-  elevation: 3;
-  shadow-color: #000;
-  shadow-offset: 0px 2px;
-  shadow-opacity: 0.25;
-  shadow-radius: 3.84px;
 `;
 
 export const Stat = styled.View`
