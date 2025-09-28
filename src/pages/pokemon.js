@@ -11,7 +11,6 @@ import {
   StatLabel,
   StatValue,
   ImageStyle,
-  colors
 } from '../styles';
 
 export default class Pokemon extends Component {
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
   spriteLabel: {
     marginTop: 5,
     fontSize: 12,
-    color: colors.gray,
+    color: 'gray',
   },
   tiposContainer: {
     flexDirection: "row",
