@@ -23,6 +23,7 @@ export default class Main extends Component {
     searchPokemon: "",
     myPokemons: [],
     loading: false,
+    loadingInitial: true,
   };
 
   async componentDidMount() {
@@ -72,7 +73,7 @@ export default class Main extends Component {
   handleAddPokemon = async () => {
     const { myPokemons, searchPokemon } = this.state;
     if (!searchPokemon.trim()) {
-      alert('Por favor, digite o nome ou número do Pokémon');
+      alert("Por favor, digite o nome ou número do Pokémon");
       return;
     }
     this.setState({ loading: true });
@@ -113,7 +114,14 @@ export default class Main extends Component {
   };
 
   render() {
-    const { myPokemons, searchPokemon, loading } = this.state;
+    const { myPokemons, searchPokemon, loading, loadingInitial } = this.state;
+    if (loadingInitial) {
+      return (
+        <Container style={{ justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </Container>
+      );
+    }
     return (
       <Container>
         <Form>
