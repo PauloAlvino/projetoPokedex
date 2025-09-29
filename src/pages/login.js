@@ -17,7 +17,7 @@ const Login = () => {
   const handleLogin = async () => {
     const user = await AsyncStorage.getItem("user")
     if(!user){
-      alert("Nenhum usuário cadastro")
+      alert("Nenhum usuário cadastrado com esse e-mail")
       return
     }
     const userJson = JSON.parse(user)
