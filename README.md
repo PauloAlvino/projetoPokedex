@@ -2,8 +2,8 @@
 
 Uma aplicação mobile para explorar e colecionar Pokémon, desenvolvida com React Native.
 
-- Paulo Ricardo
-- Thiago Cunha
+- Paulo Ricardo de Azevedo Alvino
+- Thiago Cunha Archete Silva
 
 ## Como Rodar o Projeto
 
